@@ -1,0 +1,449 @@
+```html
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080b10">
+  <title>DONI IP Checker</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #080b10;
+      --panel: #101720;
+      --border: #253441;
+      --neon: #00f5c8;
+      --blue: #39c9ff;
+      --text: #f0f7fa;
+      --muted: #8496a6;
+    }
+
+    body {
+      min-height: 100vh;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(ellipse at 50% 0%, #00f5c812, transparent 55%),
+        var(--bg);
+      color: var(--text);
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 650px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+      color: var(--neon);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 3px;
+    }
+
+    .logo-icon {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #00f5c866;
+      background: #00f5c812;
+      border-radius: 9px;
+      font-size: 18px;
+    }
+
+    h1 {
+      font-size: clamp(30px, 6vw, 43px);
+      letter-spacing: -1.5px;
+      margin-bottom: 12px;
+    }
+
+    h1 span {
+      color: var(--neon);
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .panel {
+      padding: 25px;
+      background: linear-gradient(145deg, #121c26, #0d131b);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 20px 70px #0005;
+    }
+
+    .panel-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .panel-title h2 {
+      font-size: 16px;
+    }
+
+    .live {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--neon);
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      background: var(--neon);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--neon);
+    }
+
+    .ip-card {
+      padding: 20px;
+      margin-bottom: 14px;
+      border: 1px solid var(--border);
+      background: #080e15;
+      border-radius: 11px;
+      transition: border-color .2s;
+    }
+
+    .ip-card:hover {
+      border-color: #00f5c866;
+    }
+
+    .ip-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .ip-type {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .version {
+      padding: 5px 8px;
+      border: 1px solid #39c9ff44;
+      background: #39c9ff0c;
+      color: var(--blue);
+      border-radius: 5px;
+      font-size: 10px;
+    }
+
+    .ip-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .ip-address {
+      min-width: 0;
+      overflow-wrap: anywhere;
+      color: var(--neon);
+      font-family: Consolas, "Courier New", monospace;
+      font-size: clamp(14px, 3vw, 19px);
+      line-height: 1.6;
+    }
+
+    .copy-btn {
+      flex-shrink: 0;
+      padding: 10px 13px;
+      border: 1px solid #00f5c844;
+      background: #00f5c810;
+      color: var(--neon);
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      transition: .2s;
+    }
+
+    .copy-btn:hover {
+      background: var(--neon);
+      color: #07100e;
+      box-shadow: 0 0 18px #00f5c833;
+    }
+
+    .copy-btn:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+    }
+
+    .bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .refresh-btn {
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: #18232e;
+      color: var(--text);
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .refresh-btn:hover {
+      border-color: var(--neon);
+      color: var(--neon);
+    }
+
+    .footer {
+      margin-top: 24px;
+      text-align: center;
+      color: #647483;
+      font-size: 11px;
+      line-height: 1.8;
+    }
+
+    .footer strong {
+      color: var(--neon);
+      letter-spacing: 2px;
+    }
+
+    @media (max-width: 440px) {
+      body {
+        padding: 16px;
+      }
+
+      .panel {
+        padding: 17px;
+      }
+
+      .ip-card {
+        padding: 15px;
+      }
+
+      .ip-row {
+        align-items: flex-start;
+      }
+
+      .copy-btn {
+        padding: 9px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="app">
+    <header class="header">
+      <div class="logo">
+        <div class="logo-icon">⌘</div>
+        DONI NETWORK TOOLS
+      </div>
+
+      <h1>My <span>IP Address</span></h1>
+
+      <p class="subtitle">
+        Kiểm tra địa chỉ IP công khai của bạn.<br>
+        Nhanh chóng · Chính xác · Miễn phí
+      </p>
+    </header>
+
+    <section class="panel">
+      <div class="panel-title">
+        <h2>Thông tin kết nối</h2>
+        <div class="live">
+          <span class="dot"></span>
+          IP CHECKER
+        </div>
+      </div>
+
+      <div class="ip-card">
+        <div class="ip-top">
+          <div class="ip-type">
+            <span>IPv4</span>
+            <span class="version">32-BIT</span>
+          </div>
+        </div>
+
+        <div class="ip-row">
+          <div class="ip-address" id="ipv4">Đang tải...</div>
+          <button class="copy-btn" data-copy="ipv4">
+            Sao chép
+          </button>
+        </div>
+      </div>
+
+      <div class="ip-card">
+        <div class="ip-top">
+          <div class="ip-type">
+            <span>IPv6</span>
+            <span class="version">128-BIT</span>
+          </div>
+        </div>
+
+        <div class="ip-row">
+          <div class="ip-address" id="ipv6">Đang tải...</div>
+          <button class="copy-btn" data-copy="ipv6">
+            Sao chép
+          </button>
+        </div>
+      </div>
+
+      <div class="bottom">
+        <div class="status">
+          <span class="dot"></span>
+          <span id="status">Đang kiểm tra kết nối...</span>
+        </div>
+
+        <button class="refresh-btn" id="refresh">
+          ↻ Làm mới IP
+        </button>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <strong>DONI</strong><br>
+      IP Checker · © 2026
+    </footer>
+  </main>
+
+  <script>
+    const $ = id => document.getElementById(id);
+
+    async function fetchIP(id, endpoint) {
+      const element = $(id);
+      element.textContent = "Đang tải...";
+
+      try {
+        const response = await fetch(endpoint, {
+          cache: "no-store"
+        });
+
+        if (!response.ok) {
+          throw new Error("Request failed");
+        }
+
+        const data = await response.json();
+
+        if (!data.ip) {
+          throw new Error("No IP returned");
+        }
+
+        element.textContent = data.ip;
+      } catch {
+        element.textContent = "Không khả dụng";
+      }
+    }
+
+    async function loadIPs() {
+      $("status").textContent = "Đang kiểm tra...";
+      $("refresh").disabled = true;
+
+      await Promise.all([
+        fetchIP("ipv4", "https://api4.ipify.org?format=json"),
+        fetchIP("ipv6", "https://api6.ipify.org?format=json")
+      ]);
+
+      $("status").textContent = "Đã kiểm tra xong";
+      $("refresh").disabled = false;
+    }
+
+    async function copyText(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return;
+      }
+
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+
+      document.body.appendChild(textarea);
+      textarea.select();
+
+      const success = document.execCommand("copy");
+      textarea.remove();
+
+      if (!success) {
+        throw new Error("Copy failed");
+      }
+    }
+
+    document.querySelectorAll("[data-copy]").forEach(button => {
+      button.addEventListener("click", async () => {
+        const id = button.dataset.copy;
+        const ip = $(id).textContent;
+
+        if (
+          !ip ||
+          ip === "Đang tải..." ||
+          ip === "Không khả dụng"
+        ) {
+          $("status").textContent = "Không có IP để sao chép";
+          return;
+        }
+
+        try {
+          await copyText(ip);
+          button.textContent = "Đã sao chép ✓";
+          $("status").textContent = "Đã sao chép địa chỉ " + id.toUpperCase();
+
+          setTimeout(() => {
+            button.textContent = "Sao chép";
+          }, 1500);
+        } catch {
+          $("status").textContent = "Không thể sao chép địa chỉ IP";
+        }
+      });
+    });
+
+    $("refresh").addEventListener("click", loadIPs);
+
+    loadIPs();
+  </script>
+</body>
+</html>
+```
